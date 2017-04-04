@@ -21,9 +21,15 @@ namespace Dacster {
     public partial class MainWindow : Window {
         string instance = "";
         string database = "";
-        
+        string smartInstance = "";
+        string smartDatabase = "";
+        List<string> foundInstances = new List<string>();
+        List<string> foundDatabases = new List<string>();
+
         public MainWindow() {
             InitializeComponent();
+            foundInstances = SmartList.GetInstances();
+            this.smartInstanceBox.ItemsSource = foundInstances;
         }
 
         private void instanceTextBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -40,6 +46,16 @@ namespace Dacster {
             Dacpac CurrentJob = new Dacpac(instance, database);
 
             SqlTools.RunSqlPackage(instance, database);
+        }
+
+        private void smartInstanceBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            string smartInstance = smartInstanceBox.SelectedItem.ToString();
+            foundDatabases = SmartList.GetDatabases(smartInstance);
+            this.smartDatabaseBox.ItemsSource = foundDatabases;
+        }
+
+        private void smartDatabaseBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            
         }
     }
 }
